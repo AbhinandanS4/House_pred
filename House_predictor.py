@@ -12,13 +12,6 @@ from sklearn.preprocessing import StandardScaler
 le=LabelEncoder()
 Scr=StandardScaler()
 
-X=df.drop(columns=['price'])
-y=df['price']
-
-from sklearn.model_selection import train_test_split
-
-X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.25,random_state=12)
-
 def load_model():
 
     with open('lr_model.pkl','rb') as file:
