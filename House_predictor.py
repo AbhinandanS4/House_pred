@@ -25,7 +25,7 @@ lr= pickle.load(open('lr_model.pkl','rb'))
 
 st.title("House Price Predictor")
 st.write("""Please Select The Features of Your House""")
-area = st.text_input("Area:")
+area = st.text_input("Area (in sq ft.):")
 bedrooms=st.text_input('Bedrooms:')
 bathrooms=st.text_input('Bathrooms:')
 stories=st.text_input('Stories:')
