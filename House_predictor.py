@@ -30,6 +30,7 @@ bedrooms=st.text_input('Bedrooms:')
 bathrooms=st.text_input('Bathrooms:')
 stories=st.text_input('Stories:')
 parking=st.text_input('Parkings Available:')
+prefarea=st.selectbox("Preferred Area?" ,['yes','no'])
 mainroad = st.selectbox("Main Road", ['yes', 'no'])
 airconditioning = st.selectbox("Air Conditioning?", ['yes', 'no'])
 furnishingstatus=st.selectbox("Furnishing Status",['furnished','semi-furnished','unfurnished'])
@@ -44,6 +45,7 @@ if ok:
         'mainroad': [mainroad],
         'airconditioning': [airconditioning],
         'parking': [int(parking)],
+        'prefarea':[prefarea],
         'furnishingstatus': [furnishingstatus]
     })  
     x['mainroad']=le.fit_transform(x['mainroad'])
