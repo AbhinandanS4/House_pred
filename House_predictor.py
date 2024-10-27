@@ -51,6 +51,7 @@ if ok:
     x['mainroad']=le.fit_transform(x['mainroad'])
     x['airconditioning']=le.fit_transform(x['airconditioning'])
     x['furnishingstatus']=le.fit_transform(x['furnishingstatus'])
+    x['prefarea']=le.fit_transform(x['prefarea'])
     pred=int(lr.predict(x))
 
         
