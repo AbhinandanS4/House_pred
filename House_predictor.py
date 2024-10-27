@@ -35,9 +35,7 @@ mainroad = st.selectbox("Main Road", ['yes', 'no'])
 airconditioning = st.selectbox("Air Conditioning?", ['yes', 'no'])
 furnishingstatus=st.selectbox("Furnishing Status",['furnished','semi-furnished','unfurnished'])
 ok=st.button("Predict")
-if ok:
-    # Prepare the input data based on user input
-    x = pd.DataFrame({
+x = pd.DataFrame({
         'area': [float(area)],
         'bedrooms': [int(bedrooms)],
         'bathrooms': [int(bathrooms)],
@@ -47,7 +45,10 @@ if ok:
         'parking': [int(parking)],
         'prefarea':[prefarea],
         'furnishingstatus': [furnishingstatus]
-    })  
+})
+st.dataframe(x)
+if ok:
+    # Prepare the input data based on user input 
     x['mainroad']=le.fit_transform(x['mainroad'])
     x['airconditioning']=le.fit_transform(x['airconditioning'])
     x['furnishingstatus']=le.fit_transform(x['furnishingstatus'])
