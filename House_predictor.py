@@ -46,6 +46,7 @@ x = pd.DataFrame({
         'prefarea':[prefarea],
         'furnishingstatus': [furnishingstatus]
 })
+st.subheader("Your Selections:")
 st.dataframe(x)
 if ok:
     # Prepare the input data based on user input 
