@@ -60,5 +60,7 @@ if ok:
 feedback = st.text_area("Please share your feedback about the prediction or the app's usability:")
 
 if st.button("Submit Feedback"):
+    with open("feedback.txt", "a") as f:
+        f.write(feedback + "\n")
   # Here you can process and store the feedback (e.g., save to a file or database).
   st.success("Thank you for your feedback!")
