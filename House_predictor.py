@@ -56,3 +56,9 @@ if ok:
 
         
     st.write(f"Estimated Cost of the House will be: {u'\u20B9'}{pred}")
+    st.header("Feedback")
+feedback = st.text_area("Please share your feedback about the prediction or the app's usability:")
+
+if st.button("Submit Feedback"):
+  # Here you can process and store the feedback (e.g., save to a file or database).
+  st.success("Thank you for your feedback!")
