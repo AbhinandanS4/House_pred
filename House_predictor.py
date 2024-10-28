@@ -2,19 +2,12 @@ import streamlit as st
 import pandas as pd
 import pickle
 import numpy as np
-@st.cache_data
 url = 'https://raw.githubusercontent.com/AbhinandanS4/House_pred/refs/heads/main/Housing.csv'
 df = pd.read_csv(url, index_col=0)
 df.drop(columns=['guestroom','basement','hotwaterheating','prefarea'],inplace=True)
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-X = df.drop(columns=['price'])
-y = df['price']
-X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.25,random_state=12)
-X_train['mainroad']=le.fit_transform(X_train['mainroad'])
-X_train['airconditioning']=le.fit_transform(X_train['airconditioning'])
-X_train['furnishingstatus']=le.fit_transform(X_train['furnishingstatus'])
 
 le=LabelEncoder()
 Scr=StandardScaler()
@@ -62,13 +55,29 @@ if ok:
     x['airconditioning']=le.fit_transform(x['airconditioning'])
     x['furnishingstatus']=le.fit_transform(x['furnishingstatus'])
     x['prefarea']=le.fit_transform(x['prefarea'])
-    def lr_prediction_range(model, X_new, confidence_level=0.95):
-        predictions = model.predict(x)
-        prediction_std = np.std(model.predict(X_train) - y_train)
-        margin_of_error = prediction_std * 1.2  # 1.2 corresponds to a 20% confidence interval
+    from sklearn.model_selection import cross_val_predict
+    from sklearn.metrics import mean_squared_error
+    def lr_prediction_range(model, X_new, X_all, y_all, confidence_level=0.95):
+    # Generate cross-validated predictions
+        cv_predictions = cross_val_predict(model, X_all, y_all, cv=5)
+    
+    # Calculate the residuals (errors between true values and predictions)
+        residuals = y_all - cv_predictions
+    
+    # Calculate the standard deviation of the residuals
+        prediction_std = np.std(residuals)
+    
+    # Make predictions for new data
+        predictions = model.predict(X_new)
+    
+    # Define margin of error (adjust based on desired interval width, here using 1.2 as an example)
+        margin_of_error = prediction_std * 1.2
+    
+    # Compute lower and upper bounds
         lower_bound = predictions - margin_of_error
         upper_bound = predictions + margin_of_error
         return lower_bound, upper_bound
+
     pred=int(lr.predict(x))
     lower_bound, upper_bound = lr_prediction_range(lr, x)
     if selection=='Ranged':
