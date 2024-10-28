@@ -5,12 +5,11 @@ import numpy as np
 url = 'https://raw.githubusercontent.com/AbhinandanS4/House_pred/refs/heads/main/Housing.csv'
 df = pd.read_csv(url, index_col=0)
 df.drop(columns=['guestroom','basement','hotwaterheating','prefarea'],inplace=True)
-X=df.drop(columns=['price'])
-y=df['price']
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
-
+X = df.drop(columns=['price'])
+y = df['price']
 X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.25,random_state=12)
 X_train['mainroad']=le.fit_transform(X_train['mainroad'])
 X_train['airconditioning']=le.fit_transform(X_train['airconditioning'])
