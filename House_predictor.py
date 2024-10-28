@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import pickle
 import numpy as np
+@st.cache_data
 url = 'https://raw.githubusercontent.com/AbhinandanS4/House_pred/refs/heads/main/Housing.csv'
 df = pd.read_csv(url, index_col=0)
 df.drop(columns=['guestroom','basement','hotwaterheating','prefarea'],inplace=True)
