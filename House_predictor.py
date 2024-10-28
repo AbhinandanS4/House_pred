@@ -87,7 +87,7 @@ if ok:
         return lower_bound, upper_bound
 
     pred=int(lr.predict(x))
-    lower_bound, upper_bound = lr_prediction_range(lr, X, y, x)
+    lower_bound, upper_bound = lr_prediction_range(lr, x)
     if selection=='Ranged':
         st.write(f"Your House will cost will be in range: {u'\u20B9'}{round(lower_bound[0],2)} - {u'\u20B9'}{round(upper_bound[0],2)}" )
     elif selection=='Discrete':
