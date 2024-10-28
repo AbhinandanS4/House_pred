@@ -57,14 +57,14 @@ if ok:
     x['prefarea']=le.fit_transform(x['prefarea'])
     from sklearn.model_selection import cross_val_predict
     from sklearn.metrics import mean_squared_error
-    def lr_prediction_range(model, X_new, num_simulations=100, confidence_multiplier=1.2):
+    def lr_prediction_range(model, x, num_simulations=100, confidence_multiplier=1.2):
     # Initialize a list to store predictions for each simulation
         simulation_predictions = []
     
     # Perturb `X_new` and make predictions
         for _ in range(num_simulations):
         # Add small noise to `X_new` for each feature
-            perturbed_X = X_new.copy()
+            perturbed_X = x.copy()
             for col in perturbed_X.columns:
                 if perturbed_X[col].dtype in [np.float64, np.int64]:  # Only apply to numeric columns
                     perturbed_X[col] += np.random.normal(0, 0.01 * perturbed_X[col].std(), perturbed_X[col].shape)
@@ -75,8 +75,8 @@ if ok:
     # Calculate the standard deviation of the simulated predictions
         prediction_std = np.std(simulation_predictions)
     
-    # Make the initial prediction on `X_new`
-        predictions = model.predict(X_new)
+    # Make the initial prediction on `x`
+        predictions = model.predict(x)
     
     # Define margin of error based on the standard deviation of simulated predictions
         margin_of_error = prediction_std * confidence_multiplier
