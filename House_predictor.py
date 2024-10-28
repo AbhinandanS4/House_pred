@@ -57,21 +57,29 @@ if ok:
     x['prefarea']=le.fit_transform(x['prefarea'])
     from sklearn.model_selection import cross_val_predict
     from sklearn.metrics import mean_squared_error
-    def lr_prediction_range(model, X_new, X_all, y_all, confidence_level=0.95):
-    # Generate cross-validated predictions
-        cv_predictions = cross_val_predict(model, X_all, y_all, cv=5)
+    def lr_prediction_range(model, X_new, num_simulations=100, confidence_multiplier=1.2):
+    # Initialize a list to store predictions for each simulation
+        simulation_predictions = []
     
-    # Calculate the residuals (errors between true values and predictions)
-        residuals = y_all - cv_predictions
+    # Perturb `X_new` and make predictions
+        for _ in range(num_simulations):
+        # Add small noise to `X_new` for each feature
+            perturbed_X = X_new.copy()
+            for col in perturbed_X.columns:
+                if perturbed_X[col].dtype in [np.float64, np.int64]:  # Only apply to numeric columns
+                    perturbed_X[col] += np.random.normal(0, 0.01 * perturbed_X[col].std(), perturbed_X[col].shape)
+        
+        # Make a prediction with the perturbed input and store it
+            simulation_predictions.append(model.predict(perturbed_X)[0])
     
-    # Calculate the standard deviation of the residuals
-        prediction_std = np.std(residuals)
+    # Calculate the standard deviation of the simulated predictions
+        prediction_std = np.std(simulation_predictions)
     
-    # Make predictions for new data
+    # Make the initial prediction on `X_new`
         predictions = model.predict(X_new)
     
-    # Define margin of error (adjust based on desired interval width, here using 1.2 as an example)
-        margin_of_error = prediction_std * 1.2
+    # Define margin of error based on the standard deviation of simulated predictions
+        margin_of_error = prediction_std * confidence_multiplier
     
     # Compute lower and upper bounds
         lower_bound = predictions - margin_of_error
@@ -79,7 +87,7 @@ if ok:
         return lower_bound, upper_bound
 
     pred=int(lr.predict(x))
-    lower_bound, upper_bound = lr_prediction_range(lr, x)
+    lower_bound, upper_bound = lr_prediction_range(lr, X, y, x)
     if selection=='Ranged':
         st.write(f"Your House will cost will be in range: {u'\u20B9'}{round(lower_bound[0],2)} - {u'\u20B9'}{round(upper_bound[0],2)}" )
     elif selection=='Discrete':
